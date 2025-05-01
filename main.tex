@@ -2,215 +2,15 @@
 
 \documentclass[12pt,oneside]{book}
 
-\newlength{\textpt}
-\setlength{\textpt}{12pt}
-\newcommand{\flypage}[1]{\begin{titlepage}\begin{center}\vspace*{\stretch{1}}#1\vspace*{\stretch{1}}\end{center}\end{titlepage}}
-
-%========基本必备的宏包========%
-\RequirePackage{calc,float,moresize}
-%\RequirePackage[onehalfspacing]{setspace}
-\linespread{1.5}
-%1.3 onehalfspacing
-%1.6 doublespacing
-
-%===========加入目录 某章或某节=====%
-
-\newcommand{\addchtoc}[1]{
-        \cleardoublepage
-        \phantomsection
-        \addcontentsline{toc}{chapter}{#1}}
-
-\newcommand{\addsectoc}[1]{
-        \phantomsection
-        \addcontentsline{toc}{section}{#1}}
-
-%===========全文基本格式==========%
-\setlength{\parskip}{1.6ex plus 0.2ex minus 0.2ex}   %段落間距
-\setlength{\parindent}{\textpt * \real{2}}
-\RequirePackage{indentfirst} 
-
-%=========页面设置=========%
-\RequirePackage[a4paper, %a4paper size 297:210 mm
-  bindingoffset=0mm,%裝訂線
-  top=35mm,  %上邊距 包括頁眉
-  bottom=30mm,%下邊距 包括頁腳
-  inner=30mm,  %左邊距or inner
-  outer=30mm,  %右邊距or  outer
-  headheight=10mm,%頁眉
-  headsep=15mm,%
-  footskip=15mm,%
-  marginparsep=0pt, %旁註與正文間距
-  marginparwidth=0em,includemp=false% 旁註寬度計入width%旁註寬度
-  ]{geometry}
-
-%color
-\RequirePackage[table,svgnames]{xcolor}
-
-%================字體================%
-%设置数学字体
-\RequirePackage{amssymb,amsmath}
-\RequirePackage{stmaryrd}
-\everymath{\displaystyle}
-
-\RequirePackage{fontspec}
-%設置英文字體
-\setmainfont[Mapping=tex-text]{DejaVu Serif}
-\setsansfont[Mapping=tex-text]{DejaVu Sans}
-\setmonofont[Mapping=tex-text]{DejaVu Sans Mono}
-
-
-%中文環境
-\RequirePackage[]{xeCJK}
-\xeCJKsetup{PunctStyle=plain}
-\setCJKmainfont[FallBack=DejaVu Serif, ItalicFont=KaiTi]{Source Han Serif CN}
-\setCJKsansfont[FallBack=DejaVu Sans]{Source Han Sans CN}
-\setCJKmonofont[FallBack=DejaVu Sans Mono]{KaiTi}
-
-
-%%===============中文化=========%
-\renewcommand\contentsname{目~录}
-\renewcommand\listfigurename{插图目录}
-\renewcommand\listtablename{表格目录}
-\renewcommand\bibname{参~考~文~献}
-\renewcommand\indexname{索~引}
-\renewcommand\figurename{图}
-\renewcommand\tablename{表}
-\renewcommand\partname{部分}
-\renewcommand\appendixname{附录}
-\renewcommand{\today}{\number\year{}年\number\month{}月\number\day{}日}
-
-
-%=======页眉页脚格式=========%
-\RequirePackage{fancyhdr}   %頁眉頁腳
-\RequirePackage{zhnumber}  %计数器中文化
-\pagestyle{fancy}
-\renewcommand{\sectionmark}[1]
-{\markright{第\zhnumber{\arabic{section}}节~~#1}{}}
-
-\fancypagestyle{plain}{%
-    \fancyhf{}
-    \renewcommand{\headrulewidth}{0pt}
-    \renewcommand{\footrulewidth}{0pt}
-    \fancyhf[HR]{\ttfamily \footnotesize \rightmark }
-    \fancyhf[FR]{\thepage}}
-\pagestyle{plain}
-
-
-%=========章節標題設計=========%
-\RequirePackage{titlesec}
-%修改part
-\titleformat{\part}{\huge\sffamily}{}{0em}{}
-%修改chapter
-\titleformat{\chapter}{\LARGE\sffamily}{}{0em}{}
-%修改section
-\titleformat{\section}{\Large\sffamily}{}{0em}{}
-%修改subsection
-\titleformat{\subsection}{\large\sffamily}{}{0em}{}
-%修改subsubsection
-\titleformat{\subsubsection}{\normalsize\sffamily}{}{0em}{}
-
-
-%================目录===============%
-\makeatletter
-%toc label to contents space   dynamic adjust
-\RequirePackage{tocloft}%
-\renewcommand{\numberline}[1]{%
-  \@cftbsnum #1\@cftasnum~\@cftasnumb%
-}
-\makeatother
-
-%==============超鏈接===============%
-\RequirePackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref} %設置書簽和目錄鏈接等
-\newcommand{\hlabel}[1]{\phantomsection \label{#1}}%某一小段的引用
-
-
-%=================文字強調=========%
-\RequirePackage{xeCJKfntef}
-
-\let\oldemph\emph % Save emph in oldemph
-\renewcommand{\emph}[1]{\textcolor{blue}{\textbf{#1}}}  
-
-%==================插入圖片=======%
-\RequirePackage{wrapfig}
-\RequirePackage{graphicx}
-\graphicspath{{figures/}}
-%change the caption style a little like 1-1
-\renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
-
-
-%==============插入表格========%
-\RequirePackage{booktabs}
-\renewcommand{\thetable}{\arabic{chapter}-\arabic{table}}
-\RequirePackage{caption}
-
-%插入代码
-\RequirePackage{fancyvrb} 
-\fvset{frame=lines,tabsize=4 , framesep=10pt, baselinestretch=1.8, fontsize=\footnotesize}
-%minted
-\RequirePackage{minted}
-\setminted{frame=lines, tabsize=4, framesep=10pt, fontsize=\footnotesize}
-
-\NewDocumentCommand{\showCode}{m O{python}}{
-\def\source{\detokenize{scripts/#1}}
-
-  \IfFileExists{\source}
-  {\inputminted[label=\source]{#2}{\source}}
-  {file: \source ~not exists.}
-}
-
-\NewDocumentCommand{\showCodeOut}{m}{
-\def\outfile{\detokenize{scripts/#1}}
-  \IfFileExists{\outfile}
-  {\VerbatimInput{\outfile}}
-  {file: \outfile  ~not exits.}
-}
-
-\NewDocumentCommand{\showCodeAndOut}{m O{python}}{
-\showCode{#1}[#2]
-\showCodeOut{#1.out}
-}
-
-
-
-% 简单的框线环境
-\RequirePackage{framed}
-
-% 框线表示文章引用
-\RequirePackage{mdframed} 
-\mdfsetup{frametitlealignment=\center}
-\newmdenv[frametitlebackgroundcolor=gray!20, linewidth=1pt,
-                    frametitlerulewidth=1pt, frametitlerule=true]{bookref}
-
- 
-%========脚注=========%
-\RequirePackage{tikz} 
-\newcommand*\circled[1]{
-\tikz[baseline=(char.base)]
-\node[shape=circle,draw,inner sep=0.4pt,minimum size=4pt] (char) {#1};}
-
-\newcommand*\circledarabic[1]{\circled{\arabic{#1}}}
-
-\RequirePackage{perpage} %the perpage package
-\MakePerPage{footnote} %the perpage package command
-
-\renewcommand*{\thefootnote}{\protect\circledarabic{footnote}}
-
-\makeatletter
-\renewcommand\@makefntext[1]{\vspace{5pt}\noindent
-\makebox[20pt][c]{\fontsize{10pt}{12pt}\@thefnmark}
-\fontsize{10pt}{12pt}\selectfont #1}
-%main body 与脚注之间的距离
-\setlength{\skip\footins}{20pt plus 10pt}
-\makeatother
-
-
+\usepackage[code, minted, scripts]{mybook} 
+\usepackage{mybookcover}
 
 \title{数学游乐园}
 \author{Wander}
 
   
 \begin{document}
-\maketitle
+\makemytitleA
 
 \flypage{感谢上帝}
 
@@ -1455,6 +1255,75 @@ $\{x, y\} =\{y, x\}$ 这两个集合是同一的，这里并不是要否认物�
 请看下面的写法：$\{x, x\}$ ，按照物的同一性定义，x是相同的物，这种写两个x的写法是无意义的，应该归约为 $\{x\}$ 。
 
 
+
+\part{分析}
+
+\section{相同的缩放比}
+分数实现了对数的缩放，如果仅仅只是把一个点映射为两个点，怎么看也都不是什么了不起的事，但如果将这种数的映射变化再结合智能体自身的行动能力，那就彻底打开了智能体行为模式的多样性魔盒了。比如说对a物体识别为1，执行分数映射，产生2并封装动作走路，得到行为走两步。对于行为层面的技术细节，我不想在这里讨论太多，下面继续侧重数学方面的内容分析。请看下面这个数字序列：
+
+\begin{align*}
+1 \quad 2  \quad 3 \quad ... \\
+2 \quad 4  \quad 6 \quad ...
+\end{align*}
+
+
+智能体（参考前面的分数消去公因数的讨论）最终将会发现，这些数具有相同的缩放比，也就是它不需要再创建那么多的行为单元了，只需要一个行为单元，该行为单位保持那个缩放比，然后对目标对象逐个执行分数缩放即可。
+
+相同的缩放比是一个很重要的观念感受，将会在各个智能体的行为模式中反复出现。
+
+
+\subsection{对蜘蛛结网的沉思}
+现在假设我是一个蜘蛛，我该如何结网。结网的最终效果就是这个网由粘液点和丝线组成，粘液点的作用一方面是粘贴丝线，另一方面就是预备粘昆虫。结网的子动作构成如下：
+
+\begin{enumerate}
+\item 粘液点A拉丝到粘液点B，这将构成一根直线段【直线段的定义就是两个点用线连接起来，同时连接线是均匀的紧凑的。】。
+\item 再从粘液点A移动到粘液点B，保持某个固定的缩放比，比如行走几步，滴下一滴粘液，如此重复行动到粘液点B。
+\item 再从粘液点A拉丝到新的粘液点C，从而形成一根新的直线段，蜘蛛会先执行一个转向动作，这个转向动作确立了新的直线段和之前的那根有个夹角。并重复上面步骤2。
+\item 重复上面步骤3，转向动作由相同的缩放比控制。
+\item 将各个直线段从内到外各个粘液点用丝线连接起来，为了保证这个连接动作是从内到外的，蜘蛛在每连接动作一次之后都会执行一次微小的转向动作，这个转向动作是由固定的缩放比控制的。
+\end{enumerate}
+
+笔者没有对蜘蛛结网进行过研究，就算真实的某种蜘蛛是不同的也不影响上面的讨论，上面的讨论主要目的是展示相同的缩放比在智能体行为模式中的应用。
+
+
+
+\subsection{缩放比的其他表述}
+相同的缩放比因为智能体的各个行为的不同，有眼睛看的，有水平走路加向上登使劲动作等等，而采用不同的词语来表达某两个数值之间的相同的缩放比例关系。
+
+比如眼睛看到一条直线，是因为这条直线在眼睛感知动作上，形成了某个固定的数值缩放比。
+
+比如山坡的陡峭程度，是因为水平走路使劲和向上登使劲这两个动作上的数值缩放比，某个均匀的斜坡人们会感知到这两个数值具有相同的固定缩放比。
+
+智能体在行为上只要某两个动作同时发生，并且具有数值上相同的缩放比，智能体就会敏锐地感知到。【内部技术实现细节上可能会发生某种置换合并动作，来更好地记忆和将来更节能地运算。】
+
+
+\subsection{从直线到曲线}
+很多人介绍微积分会用各种高大上的目的，但牛顿发明微分学目的只有，那就是理解曲线，而且手段也就是用直线来理解曲线。也就是将曲线看作一系列微小的直线拼接起来的，这样就能够计算得到曲线某个位置上的x和y这两个东西的缩放比（即斜率）。
+
+物理上的计算出来的斜率一般有特殊的含义和需求，但数学上对一般函数的求导，也就是得到该函数在各个不同的地方的斜率组成的新的函数，会是更加泛泛而谈的。这个时候如何理解计算得到的导数，一般会建议从斜率或者山坡的陡峭度来理解，但笔者更加建议以一种，脱离几何空间感知的观念，将其视作两种同时发生的动作，不建议额外假设认为这两种动作存在因果关系，仅仅是这两种动作，碰巧同时发生了，然后这个地方的导数，是这两个动作在此处的数值缩放比。
+
+也就是缩放比的理解必须将这两个数字映射为某种具体的两个动作，所以导数的理解也是如此。
+
+数字本身没有含义，导数也没有含义，那种纯数学上的导数含义的解释看起来似乎说了点什么，学生也听了，但其实什么都没有说。必须将数字和具体的动作【这里不再说某个东西，因为涉及到变化这里必须是动作】结合起来，所以导数的理解根据具体的情况是仁者见仁智者见智的。
+
+从爬坡运动的角度，假设人在爬某个曲线坡，暂时先抛开人的大小之类的因素不谈，就一般的爬坡而言，假设这个时候我们说此处斜率为5，意思就是告诉大腿，向上登的力设置为5N，告诉脚，水平行走的力设置为1N。
+
+
+
+\subsection{转的角度}
+智能体在两个直线段绘制动作之间，如果插入一个转向动作，来更改自己的某些状态，那么将会产生一根新的直线段。
+
+这个转向动作附带的数，即这个转向动作的强度称为所转的角度。
+
+在平面几何中，这个转的角度即这两根直线段所形成的夹角。
+
+如果智能体所转角度为n之后发现绘制的新的那根直线段等于原来的那根，那么称这个角度为周角度。
+
+在平面几何中，所转一周的角度等于 $360^{\circ}$ 。
+
+
+
+
 \part{代数}
 \chapter{向量}
 \section{什么是向量}
@@ -1585,71 +1454,6 @@ cx_2+dy_2 = kx_2 + wy_2
 
 
 
-
-\part{分析}
-
-\section{相同的缩放比}
-分数实现了对数的缩放，如果仅仅只是把一个点映射为两个点，怎么看也都不是什么了不起的事，但如果将这种数的映射变化再结合智能体自身的行动能力，那就彻底打开了智能体行为模式的多样性魔盒了。比如说对a物体识别为1，执行分数映射，产生2并封装动作走路，得到行为走两步。对于行为层面的技术细节，我不想在这里讨论太多，下面继续侧重数学方面的内容分析。请看下面这个数字序列：
-
-\begin{align*}
-1 \quad 2  \quad 3 \quad ... \\
-2 \quad 4  \quad 6 \quad ...
-\end{align*}
-
-
-智能体（参考前面的分数消去公因数的讨论）最终将会发现，这些数具有相同的缩放比，也就是它不需要再创建那么多的行为单元了，只需要一个行为单元，该行为单位保持那个缩放比，然后对目标对象逐个执行分数缩放即可。
-
-相同的缩放比是一个很重要的观念感受，将会在各个智能体的行为模式中反复出现。
-
-
-\subsection{对蜘蛛结网的沉思}
-现在假设我是一个蜘蛛，我该如何结网。结网的最终效果就是这个网由粘液点和丝线组成，粘液点的作用一方面是粘贴丝线，另一方面就是预备粘昆虫。结网的子动作构成如下：
-
-\begin{enumerate}
-\item 粘液点A拉丝到粘液点B，这将构成一根直线段【直线段的定义就是两个点用线连接起来，同时连接线是均匀的紧凑的。】。
-\item 再从粘液点A移动到粘液点B，保持某个固定的缩放比，比如行走几步，滴下一滴粘液，如此重复行动到粘液点B。
-\item 再从粘液点A拉丝到新的粘液点C，从而形成一根新的直线段，蜘蛛会先执行一个转向动作，这个转向动作确立了新的直线段和之前的那根有个夹角。并重复上面步骤2。
-\item 重复上面步骤3，转向动作由相同的缩放比控制。
-\item 将各个直线段从内到外各个粘液点用丝线连接起来，为了保证这个连接动作是从内到外的，蜘蛛在每连接动作一次之后都会执行一次微小的转向动作，这个转向动作是由固定的缩放比控制的。
-\end{enumerate}
-
-笔者没有对蜘蛛结网进行过研究，就算真实的某种蜘蛛是不同的也不影响上面的讨论，上面的讨论主要目的是展示相同的缩放比在智能体行为模式中的应用。
-
-
-
-\subsection{缩放比的其他表述}
-相同的缩放比因为智能体的各个行为的不同，有眼睛看的，有水平走路加向上登使劲动作等等，而采用不同的词语来表达某两个数值之间的相同的缩放比例关系。
-
-比如眼睛看到一条直线，是因为这条直线在眼睛感知动作上，形成了某个固定的数值缩放比。
-
-比如山坡的陡峭程度，是因为水平走路使劲和向上登使劲这两个动作上的数值缩放比，某个均匀的斜坡人们会感知到这两个数值具有相同的固定缩放比。
-
-智能体在行为上只要某两个动作同时发生，并且具有数值上相同的缩放比，智能体就会敏锐地感知到。【内部技术实现细节上可能会发生某种置换合并动作，来更好地记忆和将来更节能地运算。】
-
-
-\subsection{从直线到曲线}
-很多人介绍微积分会用各种高大上的目的，但牛顿发明微分学目的只有，那就是理解曲线，而且手段也就是用直线来理解曲线。也就是将曲线看作一系列微小的直线拼接起来的，这样就能够计算得到曲线某个位置上的x和y这两个东西的缩放比（即斜率）。
-
-物理上的计算出来的斜率一般有特殊的含义和需求，但数学上对一般函数的求导，也就是得到该函数在各个不同的地方的斜率组成的新的函数，会是更加泛泛而谈的。这个时候如何理解计算得到的导数，一般会建议从斜率或者山坡的陡峭度来理解，但笔者更加建议以一种，脱离几何空间感知的观念，将其视作两种同时发生的动作，不建议额外假设认为这两种动作存在因果关系，仅仅是这两种动作，碰巧同时发生了，然后这个地方的导数，是这两个动作在此处的数值缩放比。
-
-也就是缩放比的理解必须将这两个数字映射为某种具体的两个动作，所以导数的理解也是如此。
-
-数字本身没有含义，导数也没有含义，那种纯数学上的导数含义的解释看起来似乎说了点什么，学生也听了，但其实什么都没有说。必须将数字和具体的动作【这里不再说某个东西，因为涉及到变化这里必须是动作】结合起来，所以导数的理解根据具体的情况是仁者见仁智者见智的。
-
-从爬坡运动的角度，假设人在爬某个曲线坡，暂时先抛开人的大小之类的因素不谈，就一般的爬坡而言，假设这个时候我们说此处斜率为5，意思就是告诉大腿，向上登的力设置为5N，告诉脚，水平行走的力设置为1N。
-
-
-
-\subsection{转的角度}
-智能体在两个直线段绘制动作之间，如果插入一个转向动作，来更改自己的某些状态，那么将会产生一根新的直线段。
-
-这个转向动作附带的数，即这个转向动作的强度称为所转的角度。
-
-在平面几何中，这个转的角度即这两根直线段所形成的夹角。
-
-如果智能体所转角度为n之后发现绘制的新的那根直线段等于原来的那根，那么称这个角度为周角度。
-
-在平面几何中，所转一周的角度等于 $360^{\circ}$ 。
 
 
 
@@ -1818,15 +1622,226 @@ A \Leftrightarrow a_1 \Leftrightarrow a_2 \Leftrightarrow a_3 \Leftrightarrow a_
 这样一系列的等价变换过程可能是有限数目的，如此则称之为该等价变换族是有穷的；也可能是无穷数目的。但智能体不在乎该等价变换族是否是可以穷尽的，实际上智能体也不需要列举其中的全部，甚至智能体可以不需要主动去进行其中的某些运算【部分独立运算上报】，它需要做的就是容忍这种差异性。
 
 
-\section{非等价变换}
+\subsection{非等价变换}
 不是等价变换的就是非等价变换，但不要死板地认为某类变换一定就是非等价变换。是否符合物的同一性要求是关键，确切来说，是否符合当前物的同一性判断需求，需求，是一个很灵活的词语。但非常遗憾，形而上学家们，智能体知识体系的最高标准就是这样一个灵活的需求。
 
 有一种反驳观点，机械主义也好，形而上学家也好，会反驳到，智能体的最终物的同一性判断需求是要逼近宇宙的真相，而宇宙的真相并不是一个灵活的标准，关于这个反驳观点请继续看下面的讨论。
 
-\section{学习的理想和谐态}
+\subsection{学习的理想和谐态}
 现在假定，智能体满足了对于物的同一性的所有需求，从而让自己在和外部世界的交互中达到了某种和谐的状态，称这样的状态是智能体达到了学习的理想和谐态。这种状态不一定是静态的，从时间的某个局部角度出发，会看到一些周期性的均衡变化，但拉长时间来看，可以近似看作无变化的了。
 
 对于这样的观点，我是无法反驳的，我只能说考虑到世界的复杂性，小小的人类智能体是不可能穷尽彻底模拟宇宙一切可能性的，生也有涯，知无涯也。但我为什么要在这里花费一段文字来描述这样一种不可能达到的状态呢？因为这里描述的学习的理想和谐态，标记了一个方向，是有用的。
+
+
+\section{逻辑}
+逻辑讨论了智能体的内部运作的一般性规律。所谓的数理逻辑是个奇怪的名词，仿佛逻辑只和数学或者物理有关。
+
+逻辑上的一些基本常识，简单了解下即可，在逻辑语言的学习上，要适度，请看下面的批判。
+
+
+\subsection{对形式化语言一些错误观点的批判}
+\subsubsection{认为形式化语言表达能力更强}
+恰恰相反，形式化语言都存在着一些约束和限定条件，表达能力最强的永远是没有限制的自然语言。
+
+
+\subsubsection{认为形式化语言表达更加的精确}
+认为使用形式化的语言，会更加的精确\footnote{\cite{数学思维导论}一书的原话就是为了使我们的语言运用更加的精确。}。尤其是在数学上，人们更加走向另外一个极端，会认为数学符号表达的公式会更加的精确，推荐使用 $\forall$ 这样的符号而不是 \textit{对于所有} 这样的自然语言表达。
+
+语言，专业领域的语言，要做的只有一个工作，那就是规范化。避免出现一个人说五个苹果一样多，一个人说一巴掌一样多，大家都规范使用相同的术语方便快速沟通交流，但其实大脑在说这些不同的词语时，内部活动都是大同小异的，并没有那个会比那个更精确的说法。
+
+\subsubsection{企图通过形式化语言的研究穷极一切真理}
+假设乔姆斯基的底层语法理论是正确的，其原因只可能是因为我们都处在同一个世界之中。
+
+假设有一个东西，存在无数种可能的变体，为什么要分析那无穷多的变体，然后隔靴搔痒地推测那个东西的存在状态，而不是直接去研究那个东西？形式化语言学家说道：是的啊，我们正要去研究那个东西，于是他们虚构出那个所谓的底层语言，并臆想到这个底层语言可能是基于基因。但是为什么不再多踏一步，是因为我们都处于同一个世界中，所以才造就了基因上运作的某种相似性，并继而造成了语言底层的某种相似性。所以为什么不直接去研究那个实在的外在世界，而要去研究某个虚构出来的底层语言呢。
+
+本小节也是对那种研究倾向进行了批判，那就是企图通过形式化语言的研究，以一种哲学家的天真气派，想要通过大脑自身的内省活动，来穷极这世间一切的真理。这种极端的唯心主义倾向是极度有害的，当然，适度的哲学内省有时是有益的，但要适度。
+
+\subsection{命题}
+命题动作是智能体内部的描述性动作。命题动作对智能体内部存在状态是完全正交的。命题动作在人类这个智能体上会具现为命题语句，对于其他智能体则可能没有这种命题语句输出，但可以虚构出某种语言组件加之于目标研究对象上，从而产生某种虚构出来的命题语句输出行为。简便起见，命题语句简称\emph{命题}，也就是上面讨论的命题动作。
+
+一般来说智能体对自身内部存在状态相较于外部世界会更加确定明晰，对于一些无法判定的情况，这些情况不在数学的研究范围内，所以在数学上人们谈论的命题会额外加上一个条件，即智能体能够对该命题语句进行判定，判定结果只可能是真或假。这里谈及的真假，只是智能体内部认为的真或假，无关乎实际的真假。
+
+\emph{命题成立}：所以命题成立，是指该命题可以判定真假。如果一个命题既是真又是假，那么称这个命题存在矛盾，命题不成立。
+
+
+\subsection{基本命题}
+
+\begin{description}
+\item[简单命题] 不能再继续分解为某个子命题的命题称为简单命题。
+\item[否定命题] 某个命题的否定称为原命题的否定命题。 $\neg A$
+\item[存在命题] 类似于 \textit{D中存在具有性质E的一个对象x} 这样的命题称为存在命题。
+\item[概括命题] 类似于 \textit{D中所有的对象x都具有性质E} 这样的命题称为概括命题。
+\end{description}
+
+\subsection{复合命题}
+通过不同的逻辑将一些基本命题连接起来就能组成一个新的复合命题。
+
+
+\subsubsection{and逻辑}
+命题A和B必须都为真，复合命题才为真，否则为假。该复合命题常被称为与命题，或者合取命题。
+
+\begin{framed}
+A 且 B
+\end{framed}
+
+\begin{framed}
+A and B
+\end{framed}
+
+\begin{framed}
+$A \wedge B$
+\end{framed}
+
+\subsubsection{or逻辑}
+命题A和B只要有一个为真则复合命题为真，否则为假。该复合命题常被称为或命题，或者析取命题。
+
+\begin{framed}
+A 或 B
+\end{framed}
+
+\begin{framed}
+A or B
+\end{framed}
+
+\begin{framed}
+$A \vee B$
+\end{framed}
+
+\subsubsection{异或逻辑}
+命题A和B只能有一个为真复合命题才为真，否则为假。该复合命题常被称为异或命题。
+
+\begin{framed}
+要么 A 要么 B
+\end{framed}
+
+\subsubsection{if逻辑}
+如果A为真B为真那么复合命题为真，如果A为真B为假那么复合命题为假，其余情况复合命题皆为真。该复合命题常被称为条件命题，或者蕴涵命题。
+
+\begin{framed}
+如果 A 则 B
+\end{framed}
+
+\begin{framed}
+if A then B
+\end{framed}
+
+\begin{framed}
+$A \rightarrow B$
+\end{framed}
+
+中文的蕴涵一词很让人困惑。一般会用 $A \to B$ 这样的单箭头来表示条件命题，说是为了和 $A \Rightarrow B$ 这样的推出符号区别开来，但没看出这有什么改进，仍然会让人往某种变化上联想。条件命题更多的是一种存在状态的描述，用自然语言if ... then ... 也许更能让人去把握这其中的含义。也正因为条件命题是一种静态的存在状态，所以不需要A为真来驱动推导过程，如果A为假，条件命题中的B是真是假都无所谓，反正不会触发，至于条件命题整体则不会报错总为真。
+
+
+
+\begin{table}[H]
+\begin{tabular}{@{}llllll@{}}
+\toprule
+{A} & {B}  & {$A \to B$} \\ \midrule
+
+{T}          & {T}       & {T}   \\
+{T}          & {F}       & {F}   \\
+{F}          & {T}        & {T}   \\
+{F}          & {F}       & {T}   \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\subsubsection{iff逻辑}
+命题A和B同真同假，则复合命题为真，否则为假。该复合命题常被称为双条件命题。
+
+\begin{framed}
+A 当且仅当 B
+\end{framed}
+
+当且仅当的英文if and only if，常缩写为iff。
+\begin{framed}
+A iff B
+\end{framed}
+
+\begin{table}[H]
+\begin{tabular}{@{}llllll@{}}
+\toprule
+{A} & {B}  & {$A \leftrightarrow B$} \\ \midrule
+{T}          & {T}       & {T}   \\
+{T}          & {F}       & {F}   \\
+{F}          & {T}        & {F}   \\
+{F}          & {F}       & {T}   \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{等价命题}
+如果两个命题总是同真同假，则称这两个命题为等价命题。
+
+\begin{equation*}
+A \leftrightarrow B
+\end{equation*}
+
+如上写上一个双条件命题，并声明其为真，则其中的A命题B命题是等价命题。
+
+
+\subsection{逻辑定律}
+等价命题构成的双条件命题总为真。这些命题之间的变换为等价变换。
+
+下面这些逻辑上总结出来的等价变换规律被称为逻辑定律。
+
+\subsubsection{析取和合取的分配律}
+\begin{equation}
+A \text{且} (B \text{或} C) \leftrightarrow (A \text{且} B) \text{或} (A \text{且} C)
+\end{equation}
+
+\begin{equation}
+A \text{或} (B \text{且} C) \leftrightarrow (A \text{或} B) \text{且} (A \text{或} C)
+\end{equation}
+
+\subsubsection{蕴涵的换位}
+A成立则B成立等价于B不成立则A不成立：
+
+\begin{equation}
+(A \rightarrow B) \leftrightarrow (\text{非}B \rightarrow \text{非}A)
+\end{equation}
+
+\begin{table}[H]
+\begin{tabular}{@{}llllll@{}}
+\toprule
+{A} & {B} & {¬A} & {¬B} & {¬B→¬A} & {A→B} \\ \midrule
+
+{T}          & {T} & {F}  & {F}  & {T}     & {T}   \\
+{T}          & {F} & {F}  & {T}  & {F}     & {F}   \\
+{F}          & {T} & {T}  & {F}  & {T}     & {T}   \\
+{F}          & {F} & {T}  & {T}  & {T}     & {T}   \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{析取的否定}
+
+\subsubsection{合取的否定}
+
+\subsubsection{存在命题的否定}
+\begin{equation}
+\text{非}(\exists_x | E) \leftrightarrow (\forall_x | \text{非}E)
+\end{equation}
+
+\subsubsection{概括命题的否定}
+\begin{equation}
+\text{非}(\forall_x | E) \leftrightarrow (\exists_x | \text{非}E)
+\end{equation}
+
+\subsubsection{蕴涵的否定}
+
+\subsubsection{逻辑学基本定理}
+如果一个命题B由假设A推出并且如果假设A被满足，那么命题B成立。
+
+\begin{equation}
+\left\{(A \rightarrow B) \text{且} A\right\} \rightarrow B
+\end{equation}
+
+\subsection{命题族}
+命题族是这样一系列的命题组成的集合，它们都和目标研究物有着直接或者间接的联系\footnote{在逻辑教学书籍上喜欢将苏格拉底会死的和苹果是红的等一些毫不相关的命题组合起来的做法是很奇怪的。}，它们或真或假，但都彼此之间是逻辑自洽的，即在命题族内所有的命题都是成立的。
+
+命题族很好地描述了智能体关于目标研究物的内部认知状态。
+
+
 
 
 
@@ -1840,27 +1855,7 @@ $A \equiv B$ 表示A恒等于B。恒等于仍然是属于 $A=B$的概念范畴�
 $A := B$ 表示A定义等于B。定义等于仍然属于 $A=B$的概念范畴，只是更加精细地表明了在这里是先验地定义或者说假定这个语句为真。比如说 $x := x*x$ ，该语句的意思是假定x的值被定义等于其自身的平方。在后续的讨论中$x$当然等于$x*x$，只是更加精细地指出这个等于语句是先被假定为真的。
 
 
-\section{当且仅当}
-当且仅当的英文是if and only if，常缩写为iff。
 
-A当且仅当B：如果A成立则B成立 ，并且如果A不成立则B不成立【等价于如果B成立则A成立】。
-
-如果命题只有真或者假两种可能性，在所有情况下真值都相同，所以A不成立则B不成立等价于如果B成立则A成立。
-
-\begin{table}[H]
-\begin{tabular}{@{}llllll@{}}
-\toprule
-{A} & {B} & {¬A} & {¬B} & {¬A→¬B} & {B→A} \\ \midrule
-
-{T}          & {T} & {F}  & {F}  & {T}     & {T}   \\
-\rowcolor[HTML]{FFFFFF} 
-{T}          & {F} & {F}  & {T}  & {T}     & {T}   \\
-\rowcolor[HTML]{FFFFFF} 
-{F}          & {T} & {T}  & {F}  & {F}     & {F}   \\
-\rowcolor[HTML]{FFFFFF} 
-{F}          & {F} & {T}  & {T}  & {T}     & {T}   \\ \bottomrule
-\end{tabular}
-\end{table}
 
 
 \section{自然数集}
@@ -1964,8 +1959,10 @@ P_1 &= \frac{v}{2} + \frac{w}{2} - (\frac{3v}{4} + \frac{w}{4}) \\
 \begin{thebibliography}{99}
 \bibitem[什么是数学]{什么是数学} 《什么是数学：对思想和方法的基本研究（第三版）》 by [美] R·柯朗 \& H·罗宾 \&  左平[译]  at 2012.
 \bibitem[高观点下的初等数学第一卷]{高观点下的初等数学第一卷} 《高观点下的初等数学（第一卷）》by [德]菲利克斯·克莱因 \& 舒湘芹[译] at 2008.
+\bibitem[数学指南]{数学指南} 《数学指南：实用数学手册》 by [德]埃伯哈德·蔡德勒 at 2012. 
 \bibitem[理论和实用算术]{理论和实用算术} 《初等数学教程：理论和实用算术》by [法]唐乃尔 \& 朱德祥[译] at 2011.
 \bibitem[烧掉数学书]{烧掉数学书} 《烧掉数学书：重新发明数学》by [美]杰森·威尔克斯 \& 唐璐[译] at 2020.
+\bibitem[数学思维导论]{数学思维导论} 《数学思维导论：学会像数学家一样思考》by [美]德夫林 \& 林恩[译] at 2016.
 \bibitem[Elements of Set Theory]{Elements of Set Theory} 《Elements of Set Theory》by Herbert B. Enderton at 1977.
 \bibitem[线性代数引论]{线性代数引论} 《Introduction to Linear Algebra 5e》 by Gilbert Strang at 2016 .
 \end{thebibliography}
