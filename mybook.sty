@@ -7,14 +7,10 @@
 \PassOptionsToPackage{unicode,colorlinks=true,linkcolor=blue,citecolor=blue}{hyperref}
 \PassOptionsToPackage{svgnames,table}{xcolor}
 
-\newif\if@code
 \newif\if@minted
 \newif\if@scripts
-\@codefalse
 \@mintedfalse
 \@scriptsfalse
-% 定义选项 code
-\DeclareOption{code}{\@codetrue}
 % 定义选项minted
 \DeclareOption{minted}{\@mintedtrue}
 % 定义选项scripts
@@ -203,12 +199,10 @@
 %main body 与脚注之间的距离
 \setlength{\skip\footins}{20pt plus 10pt}
 
-
-\if@code
 %插入代码
 \RequirePackage{fancyvrb} 
 \fvset{frame=lines,tabsize=4 ,baselinestretch=1.8, fontsize=\footnotesize}    
-\fi
+
 
 \if@minted
 %minted
