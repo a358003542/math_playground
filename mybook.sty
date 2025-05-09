@@ -153,6 +153,12 @@
 \let\oldemph\emph % Save emph in oldemph
 \renewcommand{\emph}[1]{\textcolor{blue}{\textbf{#1}}}  
 
+\RequirePackage[normalem]{ulem}
+
+%波浪线稍微下移点。
+\renewcommand{\uwave}
+{\bgroup \markoverwith{\lower4.5\p@\hbox{\sixly \char58}}\ULon}
+
 %==================插入圖片=======%
 \RequirePackage{wrapfig}
 \RequirePackage{graphicx}
