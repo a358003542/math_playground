@@ -7,7 +7,6 @@
 
 脚本命令【如果终端已经激活了虚拟环境那么脚本的执行环境也在那个虚拟环境中。】：
 
-暂时先这样了：
 ```
-python -m "pywander.file_manager" scripts
+ pywander_file.exe run scripts
 ```
