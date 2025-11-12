@@ -1,6 +1,5 @@
 @echo off
 
-call .\venv\Scripts\activate.bat
-python -m "pywander.file_manager" scripts
+pywander_file.exe run scripts
 
 pause
